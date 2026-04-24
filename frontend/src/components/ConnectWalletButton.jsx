@@ -21,15 +21,15 @@ export function ConnectWalletButton() {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative">
       <button
-        className="btn btn-primary"
+        className="px-4 py-2 text-sm font-semibold text-white bg-accent rounded-lg shadow-glow shadow-inner-highlight transition-all duration-200 hover:bg-accent-bright hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
         onClick={handleConnect}
       >
         {publicKey ? `Connected: ${publicKey.slice(0, 6)}...` : "Connect Wallet"}
       </button>
       {error && (
-        <div style={{ position: "absolute", top: "100%", right: 0, marginTop: "0.5rem", whiteSpace: "nowrap" }} className="error-message">
+        <div className="absolute top-full right-0 mt-2 px-3 py-2 bg-red-500/10 border border-red-500/30 text-red-400 text-xs rounded shadow-lg whitespace-nowrap animate-in slide-in-from-top-2">
           {error}
         </div>
       )}

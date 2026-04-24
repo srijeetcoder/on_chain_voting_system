@@ -13,8 +13,7 @@ function VotePage() {
     async function loadPoll() {
       const p = await fetchPoll(pollId);
       setPoll(p);
-      const r = await fetchResults(pollId);
-      setResults(r);
+      setResults(p.vote_counts || []);
     }
     loadPoll();
   }, [pollId, voted]);
@@ -24,30 +23,41 @@ function VotePage() {
   const totalVotes = results.reduce((acc, curr) => acc + Number(curr || 0), 0);
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h2 className="page-title">{poll.question}</h2>
-      <p className="page-subtitle">Cast your vote transparently.</p>
+    <div className="max-w-4xl mx-auto flex flex-col gap-12">
+      <div className="space-y-4">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] text-gradient break-words">
+          {poll.question}
+        </h2>
+        <p className="text-lg md:text-xl text-foreground-muted leading-relaxed">
+          Cast your vote transparently.
+        </p>
+      </div>
       
-      <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "1fr 1fr" }}>
-        <div className="glass-panel">
-          <h3 style={{ marginBottom: "1rem", fontWeight: "600" }}>Options</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] shadow-card">
+          <h3 className="text-xl font-semibold tracking-tight text-foreground mb-6">Options</h3>
           <VoteOptions pollId={pollId} options={poll.options} onVoted={() => setVoted(true)} />
         </div>
         
-        <div className="glass-panel">
-          <h3 style={{ marginBottom: "1rem", fontWeight: "600" }}>Live Results</h3>
-          <ul style={{ listStyle: "none" }}>
+        <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] shadow-card">
+          <h3 className="text-xl font-semibold tracking-tight text-foreground mb-6">Live Results</h3>
+          <ul className="space-y-6">
             {poll.options.map((opt, idx) => {
               const count = Number(results[idx] || 0);
               const percentage = totalVotes === 0 ? 0 : (count / totalVotes) * 100;
               return (
-                <li key={idx} style={{ marginBottom: "1rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
-                    <span>{opt}</span>
-                    <span style={{ fontWeight: "bold" }}>{count} votes ({percentage.toFixed(1)}%)</span>
+                <li key={idx} className="space-y-2">
+                  <div className="flex justify-between items-baseline text-sm">
+                    <span className="font-medium text-foreground">{opt}</span>
+                    <span className="text-foreground-muted font-mono tracking-wide">{count} votes ({percentage.toFixed(1)}%)</span>
                   </div>
-                  <div className="results-bar-container">
-                    <div className="results-bar" style={{ width: `${percentage}%` }}></div>
+                  <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-accent rounded-full transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] relative overflow-hidden shadow-[0_0_12px_rgba(94,106,210,0.8)]" 
+                      style={{ width: `${percentage}%` }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-[200%] animate-[shimmer_2s_infinite]"></div>
+                    </div>
                   </div>
                 </li>
               );
