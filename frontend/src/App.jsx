@@ -8,16 +8,16 @@ import { ConnectWalletButton } from "./components/ConnectWalletButton";
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <header className="flex justify-between items-center p-4 bg-white shadow">
-          <h1 className="text-xl font-bold">On-Chain Voting System</h1>
-          <nav className="space-x-4">
-            <Link to="/">Home</Link>
-            <Link to="/create">Create Poll</Link>
+      <div className="app-container">
+        <header className="nav-header">
+          <Link to="/" className="nav-brand">On-Chain Voting System</Link>
+          <nav className="nav-links">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/create" className="nav-link">Create Poll</Link>
           </nav>
           <ConnectWalletButton />
         </header>
-        <main className="p-4">
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/create" element={<CreatePollPage />} />

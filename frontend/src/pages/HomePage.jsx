@@ -25,11 +25,20 @@ function HomePage() {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Polls</h2>
-      {polls.length === 0 && <div>No polls yet.</div>}
-      {polls.map((poll) => (
-        <PollCard key={poll.id} poll={poll} pollId={poll.id} />
-      ))}
+      <h2 className="page-title">Active Polls</h2>
+      <p className="page-subtitle">Cast your vote transparently on the blockchain.</p>
+      
+      {polls.length === 0 ? (
+        <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem' }}>
+          <p style={{ color: 'var(--text-muted)' }}>No polls available yet. Why not create one?</p>
+        </div>
+      ) : (
+        <div className="polls-grid">
+          {polls.map((poll) => (
+            <PollCard key={poll.id} poll={poll} pollId={poll.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # On-Chain Voting System
 
 A fully decentralized voting dApp built on Stellar Soroban. All polls and votes are stored on-chain for transparency and tamper-proof governance. No backend server is required.
@@ -98,3 +99,6 @@ npm run dev
 
 ## License
 MIT
+=======
+# on_chain_voting_system
+>>>>>>> a563b705793221bf17e6434c2088d060255b15ee

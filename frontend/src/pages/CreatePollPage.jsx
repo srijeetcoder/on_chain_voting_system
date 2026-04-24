@@ -3,8 +3,9 @@ import { CreatePollForm } from "../components/CreatePollForm";
 
 function CreatePollPage() {
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Create Poll</h2>
+    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+      <h2 className="page-title">Create Poll</h2>
+      <p className="page-subtitle">Set up a new transparent poll on the Stellar network.</p>
       <CreatePollForm />
     </div>
   );

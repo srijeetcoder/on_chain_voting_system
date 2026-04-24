@@ -19,20 +19,42 @@ function VotePage() {
     loadPoll();
   }, [pollId, voted]);
 
-  if (!poll) return <div>Loading...</div>;
+  if (!poll) return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>;
+
+  const totalVotes = results.reduce((acc, curr) => acc + Number(curr || 0), 0);
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">{poll.question}</h2>
-      <VoteOptions pollId={pollId} options={poll.options} onVoted={() => setVoted(true)} />
-      <h3 className="text-lg font-semibold mt-6 mb-2">Live Results</h3>
-      <ul>
-        {poll.options.map((opt, idx) => (
-          <li key={idx} className="mb-1">
-            {opt}: <span className="font-bold">{results[idx] || 0}</span>
-          </li>
-        ))}
-      </ul>
+    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      <h2 className="page-title">{poll.question}</h2>
+      <p className="page-subtitle">Cast your vote transparently.</p>
+      
+      <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "1fr 1fr" }}>
+        <div className="glass-panel">
+          <h3 style={{ marginBottom: "1rem", fontWeight: "600" }}>Options</h3>
+          <VoteOptions pollId={pollId} options={poll.options} onVoted={() => setVoted(true)} />
+        </div>
+        
+        <div className="glass-panel">
+          <h3 style={{ marginBottom: "1rem", fontWeight: "600" }}>Live Results</h3>
+          <ul style={{ listStyle: "none" }}>
+            {poll.options.map((opt, idx) => {
+              const count = Number(results[idx] || 0);
+              const percentage = totalVotes === 0 ? 0 : (count / totalVotes) * 100;
+              return (
+                <li key={idx} style={{ marginBottom: "1rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
+                    <span>{opt}</span>
+                    <span style={{ fontWeight: "bold" }}>{count} votes ({percentage.toFixed(1)}%)</span>
+                  </div>
+                  <div className="results-bar-container">
+                    <div className="results-bar" style={{ width: `${percentage}%` }}></div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

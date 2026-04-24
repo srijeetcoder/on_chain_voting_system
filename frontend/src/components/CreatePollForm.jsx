@@ -5,6 +5,7 @@ export function CreatePollForm({ onPollCreated }) {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", ""]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleOptionChange = (idx, value) => {
     const newOptions = [...options];
@@ -19,46 +20,65 @@ export function CreatePollForm({ onPollCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await createPoll(question, options.filter((o) => o.trim() !== ""));
-    setLoading(false);
-    setQuestion("");
-    setOptions(["", ""]);
-    if (onPollCreated) onPollCreated();
+    setError(null);
+    try {
+      await createPoll(question, options.filter((o) => o.trim() !== ""));
+      setQuestion("");
+      setOptions(["", ""]);
+      if (onPollCreated) onPollCreated();
+    } catch (err) {
+      console.error(err);
+      setError(`Failed to create poll: ${err.message || err.toString()}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow">
-      <label className="block mb-2 font-semibold">Question</label>
-      <input
-        className="w-full border p-2 mb-4"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        required
-      />
-      <label className="block mb-2 font-semibold">Options</label>
-      {options.map((opt, idx) => (
+    <form onSubmit={handleSubmit} className="glass-panel">
+      {error && <div className="error-message">{error}</div>}
+      <div className="form-group">
+        <label className="form-label">Question</label>
         <input
-          key={idx}
-          className="w-full border p-2 mb-2"
-          value={opt}
-          onChange={(e) => handleOptionChange(idx, e.target.value)}
+          className="form-input"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
           required
+          placeholder="e.g. What is the best programming language?"
         />
-      ))}
-      <button
-        type="button"
-        className="mb-4 px-2 py-1 bg-gray-200 rounded"
-        onClick={addOption}
-      >
-        Add Option
-      </button>
-      <button
-        type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded"
-        disabled={loading}
-      >
-        {loading ? "Creating..." : "Create Poll"}
-      </button>
+      </div>
+      
+      <div className="form-group">
+        <label className="form-label">Options</label>
+        {options.map((opt, idx) => (
+          <input
+            key={idx}
+            className="form-input"
+            style={{ marginBottom: "0.5rem" }}
+            value={opt}
+            onChange={(e) => handleOptionChange(idx, e.target.value)}
+            required
+            placeholder={`Option ${idx + 1}`}
+          />
+        ))}
+      </div>
+      
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={addOption}
+        >
+          + Add Option
+        </button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading}
+        >
+          {loading ? "Creating..." : "Submit Poll"}
+        </button>
+      </div>
     </form>
   );
 }

@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 
 export function PollCard({ poll, pollId }) {
   return (
-    <div className="bg-white p-4 rounded shadow mb-4">
-      <h2 className="text-lg font-semibold mb-2">{poll.question}</h2>
+    <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <h2 className="page-subtitle" style={{ color: '#f8fafc', marginBottom: '1.5rem', fontWeight: 600 }}>{poll.question}</h2>
       <Link
         to={`/vote/${pollId}`}
-        className="text-blue-600 hover:underline"
+        className="btn btn-secondary"
+        style={{ textDecoration: 'none', textAlign: 'center', marginTop: 'auto' }}
       >
         Vote / View Results
       </Link>
